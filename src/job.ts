@@ -6,7 +6,8 @@ export type JobData = {
   [key: string]:
     | SerializablePrimitives
     | JobData
-    | Array<SerializablePrimitives | JobData>;
+    | Array<SerializablePrimitives>
+    | Array<JobData>;
 };
 
 /** Represents the job object */
