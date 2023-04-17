@@ -1,4 +1,8 @@
 {
   "name": "durability-js",
-  "packageManager": "yarn@4.0.0-rc.42"
+  "packageManager": "yarn@4.0.0-rc.42",
+  "volta": {
+    "node": "18.16.0",
+    "yarn": "4.0.0-rc.42"
+  }
 }
