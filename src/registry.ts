@@ -1,3 +1,7 @@
-const registry = Map();
+import { Job, JobData } from "./job.ts";
 
-export const registerJob = (job: Job) => {};
+const registry = new Map<string, JobData>();
+
+export const registerJob = (job: Job) => {
+  registry.set(job.name, job.data);
+};
