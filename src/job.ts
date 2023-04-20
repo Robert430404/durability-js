@@ -24,7 +24,9 @@ export type JobData = {
 
 /** Represents the job object */
 export type Job = {
+  isDurable?: boolean;
+  data?: JobData;
+
   topic: string;
   qos: QOS;
-  data: JobData;
 };

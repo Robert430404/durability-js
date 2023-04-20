@@ -2,17 +2,16 @@ import { Job, JobData, QOS } from "./job.ts";
 
 /** Represents the job registries */
 type JobRegistryMaps = {
-  // ESLint is not intelligent enough to understand mapped types
-  // eslint-disable-next-line no-unused-vars
   [X in QOS]: Map<string, Job[]>;
 };
 
-/** Events that consumer will have access to */
-type ConsumerEvent = Event | CustomEvent<JobData>;
+/** Represents a handler function for a consumer */
+type ConsumerHandler = (data?: JobData) => void;
 
-// ESLint is not intelligent enough to understand function types
-// eslint-disable-next-line no-unused-vars
-type ConsumerHandler = (event: ConsumerEvent) => void;
+type RegisteredConsumer = {
+  handler: ConsumerHandler;
+  seenJobs: string[];
+};
 
 /** The arguments that we pass to registration functions */
 type RegisterConsumerArgs = {
@@ -28,11 +27,13 @@ const jobRegistries: JobRegistryMaps = {
 };
 
 /** Contains all of the consumers for a specified topic */
-const consumerRegistry = new Map<string, ConsumerHandler[]>();
+const consumerRegistry = new Map<string, RegisteredConsumer[]>();
 
 /** Registers a job with the appropriate registry */
 export const registerJob = (job: Job): void => {
   const { topic, qos } = job;
+
+  // TODO: Implement durability
 
   const registry = jobRegistries[qos];
 
@@ -63,8 +64,14 @@ export const registerConsumer = ({ topic, handler }: RegisterConsumerArgs) => {
     throw new Error("consumer registry is corrupt");
   }
 
-  existingHandlers.push(handler);
+  existingHandlers.push({
+    handler,
+    seenJobs: [],
+  });
 };
 
 /** Returns the requested registry for manipulation */
 export const getJobRegistry = (qos: QOS) => jobRegistries[qos];
+
+/** Returns the consumer registry for manipulation */
+export const getConsumerRegistry = () => consumerRegistry;
