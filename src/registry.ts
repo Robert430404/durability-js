@@ -8,8 +8,12 @@ type JobRegistryMaps = {
 /** Represents a handler function for a consumer */
 type ConsumerHandler = (data?: JobData) => void;
 
+/** Defines a registry entry for a consumer */
 type RegisteredConsumer = {
+  // This handles the job as the user wants
   handler: ConsumerHandler;
+
+  // This keeps track of whether or not a job has been seen for QOS 2
   seenJobs: string[];
 };
 

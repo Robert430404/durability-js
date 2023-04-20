@@ -1,9 +1,13 @@
 /** Different pieces of data that you can pass to the job */
 type SerializablePrimitives = number | string | boolean;
 
-/** The QOS levels available to the system */
+/**
+ * The QOS levels available to the system
+ *
+ * @see https://www.hivemq.com/blog/mqtt-essentials-part-6-mqtt-quality-of-service-levels/
+ */
 export enum QOS {
-  // Broadcasts a job to everyone currently listening with no assured delivery
+  // Broadcasts a job to everyone currently listening at most one
   Zero,
 
   // Broadcats a job that will be delivered at least once
