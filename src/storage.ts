@@ -1,14 +1,17 @@
 import { Job, isJobCollection } from "./job.ts";
 
-/** This is the key for jobs passed to the front-end from the back-end */
-export const serverCookieKey = "durability:stored:server";
+/** The storage keys for the various mediums */
+export enum JobStorageKeys {
+  Cookie = "durability:stored:server",
+  LocalStorage = "durability:stored:local",
+}
 
 /** Pulls any jobs from the cookie */
 export const getJobsFromCookie = (): Job[] => {
   // Grab the cookie value
   const cookie = document.cookie
     .split("; ")
-    .find((row) => row.startsWith(serverCookieKey))
+    .find((row) => row.startsWith(JobStorageKeys.Cookie))
     ?.split("=")[1];
 
   if (!cookie) {
@@ -22,4 +25,21 @@ export const getJobsFromCookie = (): Job[] => {
   }
 
   return cookieJobs;
+};
+
+/** Pulls any jobs from local storage */
+export const getJobsFromLocalStorage = (): Job[] => {
+  const storedJobs = localStorage.getItem(JobStorageKeys.LocalStorage);
+
+  if (!storedJobs) {
+    return [];
+  }
+
+  const parsedJobs = JSON.parse(storedJobs);
+
+  if (!isJobCollection(parsedJobs)) {
+    return [];
+  }
+
+  return parsedJobs;
 };
