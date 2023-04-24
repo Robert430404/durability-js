@@ -25,7 +25,7 @@ export enum JobStorageKeys {
   LocalStorage = "durability:stored:local",
 }
 
-/** Exposes and returns the DB bonnection */
+/** Exposes and returns the DB connection */
 const getIndexedDBConnection = async (): Promise<IDBPDatabase<JobSchema>> => {
   const resolved =
     connection ||
