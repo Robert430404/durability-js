@@ -1,10 +1,47 @@
+import { DBSchema, IDBPDatabase, openDB } from "idb";
 import { Job, isJobCollection } from "./job.ts";
+
+/** IndexedDB configuration */
+enum DBConfiguration {
+  ConnectionName = "durability-js",
+  Version = 1,
+  StoreName = "jobs",
+}
+
+interface JobSchema extends DBSchema {
+  [DBConfiguration.StoreName]: {
+    key: string;
+    value: Job;
+  };
+}
+
+/** Stores single reference to the IDB connection */
+let connection: IDBPDatabase<JobSchema>;
 
 /** The storage keys for the various mediums */
 export enum JobStorageKeys {
   Cookie = "durability:stored:server",
   LocalStorage = "durability:stored:local",
 }
+
+/** Exposes and returns the DB bonnection */
+export const getIndexedDBConnection = async (): Promise<
+  IDBPDatabase<JobSchema>
+> =>
+  connection ||
+  openDB(DBConfiguration.ConnectionName, DBConfiguration.Version, {
+    upgrade: (db, oldVersion, newVersion) => {
+      if (oldVersion === newVersion) {
+        return;
+      }
+
+      // Setup the schema for IndexedDB
+      db.createObjectStore(DBConfiguration.StoreName, {
+        keyPath: "jobId",
+        autoIncrement: true,
+      });
+    },
+  });
 
 /** Pulls any jobs from the cookie */
 export const getJobsFromCookie = (): Job[] => {
@@ -42,6 +79,22 @@ export const getJobsFromLocalStorage = (): Job[] => {
   }
 
   return parsedJobs;
+};
+
+/** Pulls any jobs from IndexedDB */
+export const getJobsFromIndexedDB = async (): Promise<Job[]> => {
+  const connection = await getIndexedDBConnection();
+  const storedJobs = await connection.getAll(DBConfiguration.StoreName);
+
+  if (!storedJobs) {
+    return [];
+  }
+
+  if (!isJobCollection(storedJobs)) {
+    return [];
+  }
+
+  return [];
 };
 
 /** Pulls all stored jobs from all storage locations */

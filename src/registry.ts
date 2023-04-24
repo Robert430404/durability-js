@@ -1,5 +1,5 @@
 import { Job, JobData, QOS } from "./job.ts";
-import { getAllStoredJobs } from "./storage.ts";
+import { getAllStoredJobs, getJobsFromIndexedDB } from "./storage.ts";
 
 /** Represents the job registries */
 type JobRegistryMaps = {
@@ -33,6 +33,8 @@ const jobRegistries: JobRegistryMaps = {
 
 /** Contains all of the consumers for a specified topic */
 const consumerRegistry = new Map<string, RegisteredConsumer[]>();
+
+export const jobsLoadedEvent = "durability:jobs:loaded";
 
 /** Returns the requested registry for manipulation */
 export const getJobRegistry = (qos: QOS) => jobRegistries[qos];
@@ -81,5 +83,15 @@ export const registerConsumer = ({ topic, handler }: RegisterConsumerArgs) => {
   });
 };
 
-/** Load the jobs from the cookie into the registry */
+/** Load the jobs from all blocking storage locations into the registry */
 getAllStoredJobs().forEach(registerJob);
+
+/** Load the jobs from all async storage locations into the registry */
+getJobsFromIndexedDB()
+  .then((jobs) => {
+    jobs.forEach(registerJob);
+  })
+  .then(() => {
+    // Dispatch an event letting listeners know they're loaded
+    document.dispatchEvent(new Event(jobsLoadedEvent));
+  });
