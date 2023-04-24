@@ -8,6 +8,7 @@ enum DBConfiguration {
   StoreName = "jobs",
 }
 
+/** Represents the IDB schema */
 interface JobSchema extends DBSchema {
   [DBConfiguration.StoreName]: {
     key: string;
