@@ -43,3 +43,9 @@ export const getJobsFromLocalStorage = (): Job[] => {
 
   return parsedJobs;
 };
+
+/** Pulls all stored jobs from all storage locations */
+export const getAllStoredJobs = (): Job[] => [
+  ...getJobsFromCookie(),
+  ...getJobsFromLocalStorage(),
+];

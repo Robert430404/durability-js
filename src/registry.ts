@@ -1,5 +1,5 @@
 import { Job, JobData, QOS } from "./job.ts";
-import { getJobsFromCookie } from "./storage.ts";
+import { getAllStoredJobs } from "./storage.ts";
 
 /** Represents the job registries */
 type JobRegistryMaps = {
@@ -82,4 +82,4 @@ export const registerConsumer = ({ topic, handler }: RegisterConsumerArgs) => {
 };
 
 /** Load the jobs from the cookie into the registry */
-getJobsFromCookie().forEach(registerJob);
+getAllStoredJobs().forEach(registerJob);
