@@ -28,21 +28,29 @@ export enum JobStorageKeys {
 /** Exposes and returns the DB bonnection */
 export const getIndexedDBConnection = async (): Promise<
   IDBPDatabase<JobSchema>
-> =>
-  connection ||
-  openDB(DBConfiguration.ConnectionName, DBConfiguration.Version, {
-    upgrade: (db, oldVersion, newVersion) => {
-      if (oldVersion === newVersion) {
-        return;
-      }
+> => {
+  const resolved =
+    connection ||
+    openDB(DBConfiguration.ConnectionName, DBConfiguration.Version, {
+      upgrade: (db, oldVersion, newVersion) => {
+        if (oldVersion === newVersion) {
+          return;
+        }
 
-      // Setup the schema for IndexedDB
-      db.createObjectStore(DBConfiguration.StoreName, {
-        keyPath: "jobId",
-        autoIncrement: true,
-      });
-    },
-  });
+        // Setup the schema for IndexedDB
+        db.createObjectStore(DBConfiguration.StoreName, {
+          keyPath: "jobId",
+          autoIncrement: true,
+        });
+      },
+    });
+
+  if (!connection) {
+    connection = resolved;
+  }
+
+  return resolved;
+};
 
 /** Pulls any jobs from the cookie */
 export const getJobsFromCookie = (): Job[] => {
