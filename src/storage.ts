@@ -26,9 +26,7 @@ export enum JobStorageKeys {
 }
 
 /** Exposes and returns the DB bonnection */
-export const getIndexedDBConnection = async (): Promise<
-  IDBPDatabase<JobSchema>
-> => {
+const getIndexedDBConnection = async (): Promise<IDBPDatabase<JobSchema>> => {
   const resolved =
     connection ||
     openDB(DBConfiguration.ConnectionName, DBConfiguration.Version, {
