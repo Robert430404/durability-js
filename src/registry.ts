@@ -34,6 +34,12 @@ const jobRegistries: JobRegistryMaps = {
 /** Contains all of the consumers for a specified topic */
 const consumerRegistry = new Map<string, RegisteredConsumer[]>();
 
+/** Returns the requested registry for manipulation */
+export const getJobRegistry = (qos: QOS) => jobRegistries[qos];
+
+/** Returns the consumer registry for manipulation */
+export const getConsumerRegistry = () => consumerRegistry;
+
 /** Registers a job with the appropriate registry */
 export const registerJob = (job: Job): void => {
   const { topic, qos } = job;
@@ -74,12 +80,6 @@ export const registerConsumer = ({ topic, handler }: RegisterConsumerArgs) => {
     seenJobs: [],
   });
 };
-
-/** Returns the requested registry for manipulation */
-export const getJobRegistry = (qos: QOS) => jobRegistries[qos];
-
-/** Returns the consumer registry for manipulation */
-export const getConsumerRegistry = () => consumerRegistry;
 
 /** Load the jobs from the cookie into the registry */
 getJobsFromCookie().forEach(registerJob);

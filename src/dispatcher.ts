@@ -1,5 +1,5 @@
 import { Job, QOS } from "./job.ts";
-import { getConsumerRegistry } from "./registry.ts";
+import { getConsumerRegistry, getJobRegistry } from "./registry.ts";
 
 /** Sends a job along the bus */
 export const dispatchJob = (job: Job) => {
@@ -30,4 +30,11 @@ export const dispatchJob = (job: Job) => {
   consumers.forEach((entry) => {
     entry.handler(job.data);
   });
+};
+
+/** Plays the jobs from the registry when called */
+export const dispatchAllJobsFromRegistry = () => {
+  getJobRegistry(QOS.Zero).forEach((entry) => entry.forEach(dispatchJob));
+  getJobRegistry(QOS.One).forEach((entry) => entry.forEach(dispatchJob));
+  getJobRegistry(QOS.Two).forEach((entry) => entry.forEach(dispatchJob));
 };
