@@ -29,7 +29,7 @@ export enum JobStorageKeys {
 const getIndexedDBConnection = async (): Promise<IDBPDatabase<JobSchema>> => {
   const resolved =
     connection ||
-    openDB(DBConfiguration.ConnectionName, DBConfiguration.Version, {
+    (await openDB(DBConfiguration.ConnectionName, DBConfiguration.Version, {
       upgrade: (db, oldVersion, newVersion) => {
         if (oldVersion === newVersion) {
           return;
@@ -41,7 +41,7 @@ const getIndexedDBConnection = async (): Promise<IDBPDatabase<JobSchema>> => {
           autoIncrement: true,
         });
       },
-    });
+    }));
 
   if (!connection) {
     connection = resolved;
