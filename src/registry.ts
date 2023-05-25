@@ -1,9 +1,9 @@
-import { Job, JobData, QOS } from "./job.ts";
+import { Job, JobData, QOSLevels } from "./job.ts";
 import { getAllStoredJobs, getJobsFromIndexedDB } from "./storage.ts";
 
 /** Represents the job registries */
 type JobRegistryMaps = {
-  [X in QOS]: Map<string, Job[]>;
+  [X in QOSLevels]: Map<string, Job[]>;
 };
 
 /** Represents a handler function for a consumer */
@@ -26,9 +26,9 @@ type RegisterConsumerArgs = {
 
 /** Contains all jobs loaded into the system */
 const jobRegistries: JobRegistryMaps = {
-  [QOS.Zero]: new Map(),
-  [QOS.One]: new Map(),
-  [QOS.Two]: new Map(),
+  [QOSLevels.AtMostOnce]: new Map(),
+  [QOSLevels.AtLeastOnce]: new Map(),
+  [QOSLevels.ExactlyOnce]: new Map(),
 };
 
 /** Contains all of the consumers for a specified topic */
@@ -37,7 +37,7 @@ const consumerRegistry = new Map<string, RegisteredConsumer[]>();
 export const jobsLoadedEvent = "durability:jobs:loaded";
 
 /** Returns the requested registry for manipulation */
-export const getJobRegistry = (qos: QOS) => jobRegistries[qos];
+export const getJobRegistry = (qos: QOSLevels) => jobRegistries[qos];
 
 /** Returns the consumer registry for manipulation */
 export const getConsumerRegistry = () => consumerRegistry;

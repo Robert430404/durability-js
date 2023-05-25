@@ -6,7 +6,7 @@ type SerializablePrimitives = number | string | boolean;
  *
  * @see https://www.hivemq.com/blog/mqtt-essentials-part-6-mqtt-quality-of-service-levels/
  */
-export enum QOS {
+enum QOS {
   // Broadcasts a job to everyone currently listening at most once
   Zero,
 
@@ -15,6 +15,17 @@ export enum QOS {
 
   // Broadcats a job that will be delivered exactly once
   Two,
+}
+
+/**
+ * This is a more human readable/legible enum representing the QOSLevels
+ *
+ * This is the public interface people will use when it comes to interacting with the system
+ */
+export enum QOSLevels {
+  AtMostOnce = QOS.Zero,
+  AtLeastOnce = QOS.One,
+  ExactlyOnce = QOS.Two,
 }
 
 /** Represents serializable data for the job */
@@ -32,7 +43,7 @@ export type Job = {
   data?: JobData;
 
   topic: string;
-  qos: QOS;
+  qos: QOSLevels;
 };
 
 /** Validates that we have valid job data */

@@ -1,4 +1,4 @@
-import { Job, QOS } from "./job.ts";
+import { Job, QOSLevels } from "./job.ts";
 import { getConsumerRegistry, getJobRegistry } from "./registry.ts";
 
 /** Sends a job along the bus */
@@ -11,7 +11,7 @@ export const dispatchJob = (job: Job) => {
   }
 
   // Assures that a job is dispatched to the handler only once
-  if (qos === QOS.Two) {
+  if (qos === QOSLevels.ExactlyOnce) {
     consumers.forEach((entry) => {
       // If this job has already been played for this consumer skip it
       if (entry.seenJobs.includes(JSON.stringify(job))) {
@@ -34,7 +34,15 @@ export const dispatchJob = (job: Job) => {
 
 /** Plays the jobs from the registry when called */
 export const dispatchAllJobsFromRegistry = () => {
-  getJobRegistry(QOS.Zero).forEach((entry) => entry.forEach(dispatchJob));
-  getJobRegistry(QOS.One).forEach((entry) => entry.forEach(dispatchJob));
-  getJobRegistry(QOS.Two).forEach((entry) => entry.forEach(dispatchJob));
+  getJobRegistry(QOSLevels.AtMostOnce).forEach((entry) =>
+    entry.forEach(dispatchJob)
+  );
+
+  getJobRegistry(QOSLevels.AtLeastOnce).forEach((entry) =>
+    entry.forEach(dispatchJob)
+  );
+
+  getJobRegistry(QOSLevels.ExactlyOnce).forEach((entry) =>
+    entry.forEach(dispatchJob)
+  );
 };
