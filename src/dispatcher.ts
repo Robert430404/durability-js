@@ -1,5 +1,5 @@
-import { Job, QOSLevels } from "./job.ts";
-import { getConsumerRegistry, getJobRegistry } from "./registry.ts";
+import { Job, QOSLevels } from "./job";
+import { getConsumerRegistry, getJobRegistry } from "./registry";
 
 /** Sends a job along the bus */
 export const dispatchJob = (job: Job) => {

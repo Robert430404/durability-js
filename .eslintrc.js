@@ -18,9 +18,12 @@ module.exports = {
   },
   rules: {
     "import/prefer-default-export": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
 
     // These have TS alternatives that are in the repo
     "no-shadow": "off",
     "no-unused-vars": "off",
+    "no-undef": "off",
   },
 };

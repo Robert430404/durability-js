@@ -1,5 +1,5 @@
-import { Job, JobData, QOSLevels } from "./job.ts";
-import { getAllStoredJobs, getJobsFromIndexedDB } from "./storage.ts";
+import { Job, JobData, QOSLevels } from "./job";
+import { getAllStoredJobs, getJobsFromIndexedDB } from "./storage";
 
 /** Represents the job registries */
 type JobRegistryMaps = {

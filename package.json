@@ -7,9 +7,11 @@
   },
   "scripts": {
     "lint": "eslint ./src/**/*.ts",
-    "format": "yarn prettier --write ./src/**/*.ts"
+    "format": "yarn prettier --write ./src/**/*.ts",
+    "test": "jest"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.1",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
     "@yarnpkg/sdks": "^3.0.0-rc.42",
@@ -18,7 +20,9 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "prettier": "^2.8.7",
+    "ts-node": "^10.9.1",
     "typescript": "5.0.4"
   },
   "dependencies": {
