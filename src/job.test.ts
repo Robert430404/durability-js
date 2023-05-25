@@ -1,4 +1,4 @@
-import { isJob, isJobCollection, isJobData } from "./job";
+import { isJob, isJobCollection, isJobData, Job, QOSLevels } from "./job";
 
 describe("isJob Guard", () => {
   it("Should block invalid jobs", () => {
@@ -10,6 +10,85 @@ describe("isJob Guard", () => {
   it("Should block an undefined job", () => {
     expect(isJob(undefined)).toBe(false);
   });
+
+  it("Should block a non-object job", () => {
+    expect(isJob(123)).toBe(false);
+  });
+
+  it("Should reject invalid job with no QOS", () => {
+    const mockData = {
+      isDurable: true,
+      topic: "jest",
+      data: {
+        key: "value",
+      },
+    };
+
+    expect(isJob(mockData)).toBe(false);
+  });
+
+  it("Should reject invalid job durability", () => {
+    const mockData = {
+      isDurable: "",
+      topic: "jest",
+      qos: QOSLevels.AtLeastOnce,
+      data: {
+        key: "value",
+      },
+    };
+
+    expect(isJob(mockData)).toBe(false);
+  });
+
+  it("Should reject invalid job topic", () => {
+    const mockData = {
+      isDurable: true,
+      topic: false,
+      qos: QOSLevels.AtLeastOnce,
+      data: {
+        key: "value",
+      },
+    };
+
+    expect(isJob(mockData)).toBe(false);
+  });
+
+  it("Should reject invalid job qos", () => {
+    const mockData = {
+      isDurable: true,
+      topic: "jest",
+      qos: 20,
+      data: {
+        key: "value",
+      },
+    };
+
+    expect(isJob(mockData)).toBe(false);
+  });
+
+  it("Should reject invalid job data", () => {
+    const mockData = {
+      isDurable: true,
+      topic: "jest",
+      qos: QOSLevels.AtLeastOnce,
+      data: false,
+    };
+
+    expect(isJob(mockData)).toBe(false);
+  });
+
+  it("Should accept a valid job", () => {
+    const mockData: Job = {
+      isDurable: false,
+      topic: "jest",
+      qos: QOSLevels.AtLeastOnce,
+      data: {
+        key: "value",
+      },
+    };
+
+    expect(isJob(mockData)).toBe(true);
+  });
 });
 
 describe("isJobCollection Guard", () => {
@@ -17,6 +96,25 @@ describe("isJobCollection Guard", () => {
     const mockData = [{}];
 
     expect(isJobCollection(mockData)).toBe(false);
+  });
+
+  it("Should reject non-arrays", () => {
+    expect(isJobCollection({})).toBe(false);
+  });
+
+  it("Should accept a valid job set", () => {
+    const mockData: Job[] = [
+      {
+        isDurable: false,
+        topic: "jest",
+        qos: QOSLevels.AtLeastOnce,
+        data: {
+          key: "value",
+        },
+      },
+    ];
+
+    expect(isJobCollection(mockData)).toBe(true);
   });
 });
 

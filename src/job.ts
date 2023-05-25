@@ -89,7 +89,14 @@ export const isJob = (x: unknown): x is Job => {
     return false;
   }
 
-  if (typeof (x as Job).qos !== "number") {
+  if (
+    typeof (x as Job).qos !== "number" ||
+    ![
+      QOSLevels.AtLeastOnce,
+      QOSLevels.AtMostOnce,
+      QOSLevels.ExactlyOnce,
+    ].includes((x as Job).qos)
+  ) {
     return false;
   }
 
@@ -109,7 +116,11 @@ export const isJob = (x: unknown): x is Job => {
 };
 
 /** Validates a collection of jobs */
-export const isJobCollection = (x: unknown[]): x is Job[] => {
+export const isJobCollection = (x: unknown): x is Job[] => {
+  if (!Array.isArray(x)) {
+    return false;
+  }
+
   for (let i = 0; i < x.length; i += 1) {
     const currentJob = x[i];
 
