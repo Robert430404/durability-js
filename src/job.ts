@@ -56,6 +56,10 @@ export const isJobData = (x: unknown): x is JobData => {
     return false;
   }
 
+  if (Array.isArray(x)) {
+    return false;
+  }
+
   if (typeof x !== "object") {
     return false;
   }
