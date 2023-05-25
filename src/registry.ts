@@ -79,7 +79,7 @@ export const registerConsumer = ({ topic, handler }: RegisterConsumerArgs) => {
 
   existingHandlers.push({
     handler,
-    seenJobs: [],
+    seenJobs: new Map<string, null>(),
   });
 };
 
