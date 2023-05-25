@@ -34,6 +34,7 @@ const jobRegistries: JobRegistryMaps = {
 /** Contains all of the consumers for a specified topic */
 const consumerRegistry = new Map<string, RegisteredConsumer[]>();
 
+/** Event name that tells the application we've loaded all of our jobs */
 export const jobsLoadedEvent = "durability:jobs:loaded";
 
 /** Returns the requested registry for manipulation */
