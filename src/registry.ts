@@ -15,7 +15,7 @@ type RegisteredConsumer = {
   handler: ConsumerHandler;
 
   // This keeps track of whether or not a job has been seen for QOS 2
-  seenJobs: string[];
+  seenJobs: Map<string, null>;
 };
 
 /** The arguments that we pass to registration functions */

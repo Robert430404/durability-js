@@ -14,12 +14,12 @@ export const dispatchJob = (job: Job) => {
   if (qos === QOSLevels.ExactlyOnce) {
     consumers.forEach((entry) => {
       // If this job has already been played for this consumer skip it
-      if (entry.seenJobs.includes(JSON.stringify(job))) {
+      if (entry.seenJobs.has(JSON.stringify(job))) {
         return;
       }
 
       // Add the job to the seen jobs for the consumer and send it
-      entry.seenJobs.push(JSON.stringify(job));
+      entry.seenJobs.set(JSON.stringify(job), null);
       entry.handler(job.data);
     });
 
