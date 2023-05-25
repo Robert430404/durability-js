@@ -2090,6 +2090,7 @@ __metadata:
     eslint-config-airbnb-base: "npm:^15.0.0"
     eslint-config-prettier: "npm:^8.8.0"
     eslint-plugin-import: "npm:^2.27.5"
+    idb: "npm:^7.1.1"
     jest: "npm:^29.5.0"
     prettier: "npm:^2.8.7"
     typescript: "npm:5.0.4"
@@ -3027,6 +3028,13 @@ __metadata:
   dependencies:
     safer-buffer: "npm:>= 2.1.2 < 3.0.0"
   checksum: 14633c984e398011b4cce3d453e6566e4cc1b58f257e6fc48ae39c25a158b926e6cd7ee6023cd84aff12952a7581bd10bd4e7954af802dd5678e83b4cb8fdbba
+  languageName: node
+  linkType: hard
+
+"idb@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "idb@npm:7.1.1"
+  checksum: 9f9a55d7ef9409d37a0270104b89137cdd2a29fbc5cab65561a1dc1d4cdb25f1239ce9dcd1abdb25b81bf81269fad0e601be7d3bd3d8f06f2060c4c65d059748
   languageName: node
   linkType: hard
 
