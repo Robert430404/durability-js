@@ -25,5 +25,6 @@ module.exports = {
     "no-shadow": "off",
     "no-unused-vars": "off",
     "no-undef": "off",
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
   },
 };
