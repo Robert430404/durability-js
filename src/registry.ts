@@ -115,5 +115,5 @@ getJobsFromIndexedDB()
   })
   .then(() => {
     // Dispatch an event letting listeners know they're loaded
-    document.dispatchEvent(new Event(jobsLoadedEvent));
+    window.dispatchEvent(new Event(jobsLoadedEvent));
   });
