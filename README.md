@@ -7,4 +7,3 @@ Durability JS is a durable event bus for event messaging in JS. It understands t
 - Install [Volta](https://volta.sh)
 - Start a new terminal session
 - run `yarn`
-
