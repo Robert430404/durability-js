@@ -1,21 +1,22 @@
-import { Job, QOSLevels } from "./job";
+import "fake-indexeddb/auto";
+import { QOSLevels } from "./job";
 import {
   JobStorageKeys,
   getAllStoredJobs,
   getJobsFromCookie,
+  getJobsFromIndexedDB,
   getJobsFromLocalStorage,
+  setCookieJob,
+  setIDBJob,
+  setLocalJob,
 } from "./storage";
 
 describe("Session Storage", () => {
   beforeEach(() => {
-    const mockJobs: Job[] = [
-      {
-        qos: QOSLevels.AtLeastOnce,
-        topic: "mock-topic",
-      },
-    ];
-
-    localStorage.setItem(JobStorageKeys.LocalStorage, JSON.stringify(mockJobs));
+    setLocalJob({
+      qos: QOSLevels.AtLeastOnce,
+      topic: "mock-topic",
+    });
   });
 
   it("Should get jobs from local storage", () => {
@@ -51,14 +52,10 @@ describe("Session Storage", () => {
 
 describe("Cookie Storage", () => {
   beforeEach(() => {
-    const mockJobs: Job[] = [
-      {
-        qos: QOSLevels.AtLeastOnce,
-        topic: "mock-topic",
-      },
-    ];
-
-    document.cookie = `${JobStorageKeys.Cookie}=${JSON.stringify(mockJobs)};`;
+    setCookieJob({
+      qos: QOSLevels.AtLeastOnce,
+      topic: "mock-topic",
+    });
   });
 
   it("Should get jobs from cookies", () => {
@@ -92,30 +89,50 @@ describe("Cookie Storage", () => {
   });
 });
 
+describe("IndexedDB Storage", () => {
+  it("Should get jobs from indexedDB", async () => {
+    await setIDBJob({
+      qos: QOSLevels.AtLeastOnce,
+      topic: "mock-topic",
+    });
+
+    const indexedDBJobs = await getJobsFromIndexedDB();
+
+    expect(Array.isArray(indexedDBJobs)).toBe(true);
+    expect(indexedDBJobs.length).toBe(1);
+
+    const mockJob = indexedDBJobs.pop();
+
+    expect(mockJob?.qos).toBe(QOSLevels.AtLeastOnce);
+    expect(mockJob?.topic).toBe("mock-topic");
+  });
+
+  it("Should return a blank array when no jobs are present", async () => {
+    const indexedDBJobs = await getJobsFromIndexedDB();
+
+    expect(Array.isArray(indexedDBJobs)).toBe(true);
+    expect(indexedDBJobs.length).toBe(0);
+  });
+
+  it("Should return a blank array when corrupt jobs are present", async () => {
+    const indexedDBJobs = await getJobsFromIndexedDB();
+
+    expect(Array.isArray(indexedDBJobs)).toBe(true);
+    expect(indexedDBJobs.length).toBe(0);
+  });
+});
+
 describe("All Stored Jobs Retrevial", () => {
   beforeEach(() => {
-    const mockSessionJobs: Job[] = [
-      {
-        qos: QOSLevels.AtLeastOnce,
-        topic: "mock-topic-session",
-      },
-    ];
+    setLocalJob({
+      qos: QOSLevels.AtLeastOnce,
+      topic: "mock-topic-session",
+    });
 
-    localStorage.setItem(
-      JobStorageKeys.LocalStorage,
-      JSON.stringify(mockSessionJobs)
-    );
-
-    const mockCookieJobs: Job[] = [
-      {
-        qos: QOSLevels.AtLeastOnce,
-        topic: "mock-topic-cookies",
-      },
-    ];
-
-    document.cookie = `${JobStorageKeys.Cookie}=${JSON.stringify(
-      mockCookieJobs
-    )};`;
+    setCookieJob({
+      qos: QOSLevels.AtLeastOnce,
+      topic: "mock-topic-cookies",
+    });
   });
 
   it("Should return valid jobs", () => {

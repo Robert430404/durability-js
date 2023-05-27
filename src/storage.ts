@@ -101,7 +101,7 @@ export const getJobsFromIndexedDB = async (): Promise<Job[]> => {
     return [];
   }
 
-  return [];
+  return storedJobs;
 };
 
 /** Pulls all stored jobs from all storage locations */
@@ -109,3 +109,28 @@ export const getAllStoredJobs = (): Job[] => [
   ...getJobsFromCookie(),
   ...getJobsFromLocalStorage(),
 ];
+
+export const setLocalJob = (job: Job): void => {
+  const existingJobs = getJobsFromLocalStorage();
+
+  existingJobs.push(job);
+
+  localStorage.setItem(
+    JobStorageKeys.LocalStorage,
+    JSON.stringify(existingJobs)
+  );
+};
+
+export const setCookieJob = (job: Job): void => {
+  const existingJobs = getJobsFromCookie();
+
+  existingJobs.push(job);
+
+  document.cookie = `${JobStorageKeys.Cookie}=${JSON.stringify(existingJobs)}`;
+};
+
+export const setIDBJob = async (job: Job): Promise<void> => {
+  const connection = await getIndexedDBConnection();
+
+  await connection.add(DBConfiguration.StoreName, job);
+};

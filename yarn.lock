@@ -1708,6 +1708,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base64-arraybuffer-es6@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "base64-arraybuffer-es6@npm:0.7.0"
+  checksum: 66d2d9323368d799c006d796844ecdbb76d00b7d3a0e4821063a506f3a1812fc1087e528548f678eb08217f15cf5198c12becf60f1a84b93562ca595295818ca
+  languageName: node
+  linkType: hard
+
 "brace-expansion@npm:^1.1.7":
   version: 1.1.11
   resolution: "brace-expansion@npm:1.1.11"
@@ -2279,6 +2286,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"domexception@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "domexception@npm:1.0.1"
+  dependencies:
+    webidl-conversions: "npm:^4.0.2"
+  checksum: dd638c0e619625336c3770caee0891d4513ed5bd655ed27483b65babd40bc9afff444cd7d489143dcbb2907bf70776efc60086350d108dc07bdf8747156748d5
+  languageName: node
+  linkType: hard
+
 "domexception@npm:^4.0.0":
   version: 4.0.0
   resolution: "domexception@npm:4.0.0"
@@ -2300,6 +2316,7 @@ __metadata:
     eslint-config-airbnb-base: "npm:^15.0.0"
     eslint-config-prettier: "npm:^8.8.0"
     eslint-plugin-import: "npm:^2.27.5"
+    fake-indexeddb: "npm:^4.0.1"
     idb: "npm:^7.1.1"
     jest: "npm:^29.5.0"
     jest-environment-jsdom: "npm:^29.5.0"
@@ -2744,6 +2761,15 @@ __metadata:
     jest-message-util: "npm:^29.5.0"
     jest-util: "npm:^29.5.0"
   checksum: 106a886342eaaf0443937ac0e76fdf6adadf87462c22f153edd588db6103817e43044ec7cfa5ebb713dc3f0c373dce002a867aa549d06de42b4f219eb95ec27d
+  languageName: node
+  linkType: hard
+
+"fake-indexeddb@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "fake-indexeddb@npm:4.0.1"
+  dependencies:
+    realistic-structured-clone: "npm:^3.0.0"
+  checksum: 3991c01645aa4dbaecbad412ad3496c2e88064244f26738a1fdf2bf129e191c613cfd9c83d1c783958bb324f6e1b52341a219c51d7395497aa27e1d022118ef3
   languageName: node
   linkType: hard
 
@@ -4321,7 +4347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.15":
+"lodash@npm:^4.17.15, lodash@npm:^4.7.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 3ac18e92108d68f88429fcddee609e42cf2b653583d9bac22308815a4cd6b185b89a0ad0d9b0c670c371d9d6b61571a98fee6b36e1db14e52766ca253ed9cba0
@@ -5082,6 +5108,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"realistic-structured-clone@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "realistic-structured-clone@npm:3.0.0"
+  dependencies:
+    domexception: "npm:^1.0.1"
+    typeson: "npm:^6.1.0"
+    typeson-registry: "npm:^1.0.0-alpha.20"
+  checksum: a0a28ace667e831a38653342cb6c42ee7e4f434cd78ac86f6059d9b9538dc7b8b5dacc57af5f8cea92cd6e784ee94cd316b1a81c5ab52a2cfb3b75c54fbdf601
+  languageName: node
+  linkType: hard
+
 "regexp.prototype.flags@npm:^1.4.3":
   version: 1.4.3
   resolution: "regexp.prototype.flags@npm:1.4.3"
@@ -5625,6 +5662,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tr46@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "tr46@npm:2.1.0"
+  dependencies:
+    punycode: "npm:^2.1.1"
+  checksum: 153d170de68ab7e68eda0cf064a8bf4e92f9606ce339485e248a427fd97aa23baddc5bdaf9a8b0033857c5d592c25024b28cc664993c611bafd37accf8fc01b3
+  languageName: node
+  linkType: hard
+
 "tr46@npm:^3.0.0":
   version: 3.0.0
   resolution: "tr46@npm:3.0.0"
@@ -5833,6 +5879,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typeson-registry@npm:^1.0.0-alpha.20":
+  version: 1.0.0-alpha.39
+  resolution: "typeson-registry@npm:1.0.0-alpha.39"
+  dependencies:
+    base64-arraybuffer-es6: "npm:^0.7.0"
+    typeson: "npm:^6.0.0"
+    whatwg-url: "npm:^8.4.0"
+  checksum: c7a17c3052451fd1e5e13d713b5deead1567a4fe2eab5d198bbafc258f64286d9ffba61c38fbef7904ec6ffd88045e4054703fb2c70596bbbf3c7bc48bd98cf6
+  languageName: node
+  linkType: hard
+
+"typeson@npm:^6.0.0, typeson@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "typeson@npm:6.1.0"
+  checksum: 2a9217cef377c5d696caff6f9c26be656aaf49569e485a900a6d955ebc2d0b97eba425bc4eaad4d468c821699a64a26969d751cf4c656977f5b16caca35df3bd
+  languageName: node
+  linkType: hard
+
 "unbox-primitive@npm:^1.0.2":
   version: 1.0.2
   resolution: "unbox-primitive@npm:1.0.2"
@@ -5946,6 +6010,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"webidl-conversions@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "webidl-conversions@npm:4.0.2"
+  checksum: 68c1adc8200c122eeb9cd3ccb6407e929dab3108210a249ce485ac71acbe8d943cf97fe03687fe350295be467de1c0538d4ee0e0818267a941f1fbcdb0d8f765
+  languageName: node
+  linkType: hard
+
+"webidl-conversions@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "webidl-conversions@npm:6.1.0"
+  checksum: 57cf495b15cae82bf97271187580f68fd636fbf945a84179025a36c5f8d712cf6a38cebd78fd147cf599ac18e7ceabe04c12fce3366c7c61d7558bbe73d1dba5
+  languageName: node
+  linkType: hard
+
 "webidl-conversions@npm:^7.0.0":
   version: 7.0.0
   resolution: "webidl-conversions@npm:7.0.0"
@@ -5976,6 +6054,17 @@ __metadata:
     tr46: "npm:^3.0.0"
     webidl-conversions: "npm:^7.0.0"
   checksum: ee3a532bfb026d307b1c7f75413a45d19292e4eff4f9db62e020ac67d00f6ac81032011604832e3b1e65665c603e6024148570dbe883a71ba93ea4838beeb162
+  languageName: node
+  linkType: hard
+
+"whatwg-url@npm:^8.4.0":
+  version: 8.7.0
+  resolution: "whatwg-url@npm:8.7.0"
+  dependencies:
+    lodash: "npm:^4.7.0"
+    tr46: "npm:^2.1.0"
+    webidl-conversions: "npm:^6.1.0"
+  checksum: 77ec3cfc3105bc497bc52ffe1953c4d129ed26356046135df288db82a2db29c7fe74836787fce304ef7ab21c4c00a008a8b117be5cf5ecbdbf14f07efe49bda7
   languageName: node
   linkType: hard
 
