@@ -2317,9 +2317,11 @@ __metadata:
     eslint-config-prettier: "npm:^8.8.0"
     eslint-plugin-import: "npm:^2.27.5"
     fake-indexeddb: "npm:^4.0.1"
+    husky: "npm:^8.0.3"
     idb: "npm:^7.1.1"
     jest: "npm:^29.5.0"
     jest-environment-jsdom: "npm:^29.5.0"
+    pinst: "npm:^3.0.0"
     prettier: "npm:^2.8.7"
     ts-jest: "npm:^29.1.0"
     ts-node: "npm:^10.9.1"
@@ -3304,6 +3306,15 @@ __metadata:
   dependencies:
     ms: "npm:^2.0.0"
   checksum: fded981fd3b507fe78f7ce505c3f060e3b53cb2155d279d794a6bddb451bb1c7f865f4ca495dc0bae695ad0c182fd5be3a581b51ba30770e6adfda960bca0e68
+  languageName: node
+  linkType: hard
+
+"husky@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "husky@npm:8.0.3"
+  bin:
+    husky: lib/bin.js
+  checksum: 016ab53f21f39af1b2387559faa9cb6e2bbbe6d3cccd64c186efe204ca4634fc11dca369da9aabe7cde4293573abe12f9b7251f20bef39ea33d8e1e8f0847550
   languageName: node
   linkType: hard
 
@@ -4958,6 +4969,15 @@ __metadata:
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
   checksum: 6ba5938c24af2c5918e94b39aa0ad48d71f2c30634de69d46e0bd32feb666de4e909406db6ffb78f98d39ef450d6a41b6fa3954dc3659d7b2b750766c1261e5e
+  languageName: node
+  linkType: hard
+
+"pinst@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "pinst@npm:3.0.0"
+  bin:
+    pinst: bin.js
+  checksum: bd358d7c5786c6782674751bd8b3656d11cf510cdfef39ae9736e3a3377b8f86332b670929b6ba25accfdade11a001768bd2ce1b60c2ee5635abb7cee12bb99f
   languageName: node
   linkType: hard
 
