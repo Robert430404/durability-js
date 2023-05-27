@@ -1,9 +1,10 @@
+import { Job, QOSLevels } from "./job";
 import {
   JobStorageKeys,
+  getAllStoredJobs,
   getJobsFromCookie,
   getJobsFromLocalStorage,
 } from "./storage";
-import { Job, QOSLevels } from "./job";
 
 describe("Session Storage", () => {
   beforeEach(() => {
@@ -88,5 +89,39 @@ describe("Cookie Storage", () => {
 
     expect(Array.isArray(cookieJobs)).toBe(true);
     expect(cookieJobs.length).toBe(0);
+  });
+});
+
+describe("All Stored Jobs Retrevial", () => {
+  beforeEach(() => {
+    const mockSessionJobs: Job[] = [
+      {
+        qos: QOSLevels.AtLeastOnce,
+        topic: "mock-topic-session",
+      },
+    ];
+
+    localStorage.setItem(
+      JobStorageKeys.LocalStorage,
+      JSON.stringify(mockSessionJobs)
+    );
+
+    const mockCookieJobs: Job[] = [
+      {
+        qos: QOSLevels.AtLeastOnce,
+        topic: "mock-topic-cookies",
+      },
+    ];
+
+    document.cookie = `${JobStorageKeys.Cookie}=${JSON.stringify(
+      mockCookieJobs
+    )};`;
+  });
+
+  it("Should return valid jobs", () => {
+    const retreivedJobs = getAllStoredJobs();
+
+    expect(Array.isArray(retreivedJobs)).toBe(true);
+    expect(retreivedJobs.length).toBe(2);
   });
 });
