@@ -37,9 +37,15 @@ export type JobData = {
     | Array<JobData>;
 };
 
+export enum JobStore {
+  LocalStorage,
+  Cookie,
+  IndexedDB,
+}
+
 /** Represents the job object */
 export interface Job {
-  isDurable?: boolean;
+  isDurable?: JobStore;
   data?: JobData;
 
   topic: string;
@@ -110,8 +116,10 @@ export const isJob = (x: unknown): x is Job => {
 
   if (
     Object.keys(x).includes("isDurable") &&
-    typeof (x as Job).isDurable !== "undefined" &&
-    typeof (x as Job).isDurable !== "boolean"
+    (typeof (x as Job).isDurable !== "number" ||
+      ![JobStore.Cookie, JobStore.LocalStorage, JobStore.IndexedDB].includes(
+        (x as Job).isDurable as JobStore
+      ))
   ) {
     return false;
   }

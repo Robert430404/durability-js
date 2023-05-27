@@ -17,7 +17,7 @@ describe("isJob Guard", () => {
 
   it("Should reject invalid job with no QOS", () => {
     const mockData = {
-      isDurable: true,
+      isDurable: 0,
       topic: "jest",
       data: {
         key: "value",
@@ -42,7 +42,7 @@ describe("isJob Guard", () => {
 
   it("Should reject invalid job topic", () => {
     const mockData = {
-      isDurable: true,
+      isDurable: 0,
       topic: false,
       qos: QOSLevels.AtLeastOnce,
       data: {
@@ -55,7 +55,7 @@ describe("isJob Guard", () => {
 
   it("Should reject invalid job qos", () => {
     const mockData = {
-      isDurable: true,
+      isDurable: 0,
       topic: "jest",
       qos: 20,
       data: {
@@ -68,7 +68,7 @@ describe("isJob Guard", () => {
 
   it("Should reject invalid job data", () => {
     const mockData = {
-      isDurable: true,
+      isDurable: 0,
       topic: "jest",
       qos: QOSLevels.AtLeastOnce,
       data: false,
@@ -79,7 +79,7 @@ describe("isJob Guard", () => {
 
   it("Should accept a valid job", () => {
     const mockData: Job = {
-      isDurable: false,
+      isDurable: 0,
       topic: "jest",
       qos: QOSLevels.AtLeastOnce,
       data: {
@@ -105,7 +105,7 @@ describe("isJobCollection Guard", () => {
   it("Should accept a valid job set", () => {
     const mockData: Job[] = [
       {
-        isDurable: false,
+        isDurable: 0,
         topic: "jest",
         qos: QOSLevels.AtLeastOnce,
         data: {
