@@ -2,6 +2,7 @@ import "fake-indexeddb/auto";
 import { QOSLevels } from "./job";
 import {
   JobStorageKeys,
+  deleteIDBJob,
   getAllStoredJobs,
   getJobsFromCookie,
   getJobsFromIndexedDB,
@@ -108,6 +109,12 @@ describe("IndexedDB Storage", () => {
   });
 
   it("Should return a blank array when no jobs are present", async () => {
+    const existingJobs = await getJobsFromIndexedDB();
+
+    if (existingJobs.length > 0) {
+      await deleteIDBJob(existingJobs[0].jobId || "");
+    }
+
     const indexedDBJobs = await getJobsFromIndexedDB();
 
     expect(Array.isArray(indexedDBJobs)).toBe(true);
@@ -115,6 +122,12 @@ describe("IndexedDB Storage", () => {
   });
 
   it("Should return a blank array when corrupt jobs are present", async () => {
+    const existingJobs = await getJobsFromIndexedDB();
+
+    if (existingJobs.length > 0) {
+      await deleteIDBJob(existingJobs[0].jobId || "");
+    }
+
     const indexedDBJobs = await getJobsFromIndexedDB();
 
     expect(Array.isArray(indexedDBJobs)).toBe(true);

@@ -38,13 +38,17 @@ export type JobData = {
 };
 
 /** Represents the job object */
-export type Job = {
+export interface Job {
   isDurable?: boolean;
   data?: JobData;
 
   topic: string;
   qos: QOSLevels;
-};
+}
+
+export interface IDBJob extends Job {
+  jobId?: string;
+}
 
 /** Validates that we have valid job data */
 export const isJobData = (x: unknown): x is JobData => {
