@@ -1,5 +1,5 @@
 import { DBSchema, IDBPDatabase, openDB } from "idb";
-import { Job, isJobCollection } from "./job.ts";
+import { Job, isJobCollection } from "./job";
 
 /** IndexedDB configuration */
 enum DBConfiguration {
