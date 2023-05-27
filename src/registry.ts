@@ -1,5 +1,11 @@
-import { Job, JobData, QOSLevels } from "./job";
-import { getAllStoredJobs, getJobsFromIndexedDB } from "./storage";
+import { Job, JobData, QOSLevels, JobStore } from "./job";
+import {
+  getAllStoredJobs,
+  getJobsFromIndexedDB,
+  setCookieJob,
+  setIDBJob,
+  setLocalJob,
+} from "./storage";
 
 /** Represents the job registries */
 type JobRegistryMaps = {
@@ -43,11 +49,9 @@ export const getJobRegistry = (qos: QOSLevels) => jobRegistries[qos];
 /** Returns the consumer registry for manipulation */
 export const getConsumerRegistry = () => consumerRegistry;
 
-/** Registers a job with the appropriate registry */
-export const registerJob = (job: Job): void => {
+/** Handles registering the job with the registry internally */
+const registerJobWithRegistry = (job: Job): void => {
   const { topic, qos } = job;
-
-  // TODO: Implement durability
 
   const registry = jobRegistries[qos];
 
@@ -64,6 +68,23 @@ export const registerJob = (job: Job): void => {
   }
 
   existingJobs.push(job);
+};
+
+/** Registers a job with the appropriate registry */
+export const registerJob = (job: Job): void => {
+  if (job.isDurable === JobStore.Cookie) {
+    setCookieJob(job);
+  }
+
+  if (job.isDurable === JobStore.LocalStorage) {
+    setLocalJob(job);
+  }
+
+  if (job.isDurable === JobStore.IndexedDB) {
+    setIDBJob(job);
+  }
+
+  registerJobWithRegistry(job);
 };
 
 /** Registers a consumer with the system */
@@ -85,12 +106,12 @@ export const registerConsumer = ({ topic, handler }: RegisterConsumerArgs) => {
 };
 
 /** Load the jobs from all blocking storage locations into the registry */
-getAllStoredJobs().forEach(registerJob);
+getAllStoredJobs().forEach(registerJobWithRegistry);
 
 /** Load the jobs from all async storage locations into the registry */
 getJobsFromIndexedDB()
   .then((jobs) => {
-    jobs.forEach(registerJob);
+    jobs.forEach(registerJobWithRegistry);
   })
   .then(() => {
     // Dispatch an event letting listeners know they're loaded
