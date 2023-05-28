@@ -29,14 +29,14 @@ describe("Dispatcher", () => {
 
     const mockJob: Job = {
       qos: QOSLevels.ExactlyOnce,
-      topic: "jest-topic",
+      topic: "jest-topic-exactly-once",
       data: {
         test: "testData",
       },
     };
 
     registerConsumer({
-      topic: "jest-topic",
+      topic: "jest-topic-exactly-once",
       handler: (data) => {
         expect(typeof data).toBe("object");
         expect(data?.test).toBe("testData");
@@ -56,14 +56,42 @@ describe("Dispatcher", () => {
 
     const mockJob: Job = {
       qos: QOSLevels.AtLeastOnce,
-      topic: "jest-topic",
+      topic: "jest-topic-at-least-once",
+      data: {
+        test: "testData",
+      },
+    };
+
+    dispatchJob(mockJob);
+
+    registerConsumer({
+      topic: "jest-topic-at-least-once",
+      handler: (data) => {
+        expect(typeof data).toBe("object");
+        expect(data?.test).toBe("testData");
+
+        counts += 1;
+      },
+    });
+
+    dispatchJob(mockJob);
+
+    expect(counts).toBe(2);
+  });
+
+  it("Should double dispatch jobs that should be at most once", () => {
+    let counts = 0;
+
+    const mockJob: Job = {
+      qos: QOSLevels.AtMostOnce,
+      topic: "jest-topic-at-most-once",
       data: {
         test: "testData",
       },
     };
 
     registerConsumer({
-      topic: "jest-topic",
+      topic: "jest-topic-at-most-once",
       handler: (data) => {
         expect(typeof data).toBe("object");
         expect(data?.test).toBe("testData");
@@ -78,19 +106,38 @@ describe("Dispatcher", () => {
     expect(counts).toBe(2);
   });
 
-  it("Should double dispatch jobs that should be at most once", () => {
+  it("Should receive all of the jobs provided theres the right QoS", () => {
     let counts = 0;
 
-    const mockJob: Job = {
-      qos: QOSLevels.AtMostOnce,
-      topic: "jest-topic",
+    const mockAtLeastOnceJob: Job = {
+      qos: QOSLevels.AtLeastOnce,
+      topic: "jest-topic-mixed",
       data: {
         test: "testData",
       },
     };
 
+    const mockAtMostOnceJob: Job = {
+      qos: QOSLevels.AtMostOnce,
+      topic: "jest-topic-mixed",
+      data: {
+        test: "testData",
+      },
+    };
+
+    const mockExactlyOnceJob: Job = {
+      qos: QOSLevels.ExactlyOnce,
+      topic: "jest-topic-mixed",
+      data: {
+        test: "testData",
+      },
+    };
+
+    dispatchJob(mockAtLeastOnceJob);
+    dispatchJob(mockExactlyOnceJob);
+
     registerConsumer({
-      topic: "jest-topic",
+      topic: "jest-topic-mixed",
       handler: (data) => {
         expect(typeof data).toBe("object");
         expect(data?.test).toBe("testData");
@@ -99,9 +146,11 @@ describe("Dispatcher", () => {
       },
     });
 
-    dispatchJob(mockJob);
-    dispatchJob(mockJob);
+    dispatchJob(mockAtLeastOnceJob);
+    dispatchJob(mockAtMostOnceJob);
+    dispatchJob(mockAtMostOnceJob);
+    dispatchJob(mockAtMostOnceJob);
 
-    expect(counts).toBe(2);
+    expect(counts).toBe(6);
   });
 });

@@ -103,6 +103,35 @@ export const registerConsumer = ({ topic, handler }: RegisterConsumerArgs) => {
     handler,
     seenJobs: new Map<string, null>(),
   });
+
+  /**
+   * Send all jobs to the newly registered handler
+   * that need to be seen at least once
+   */
+  getJobRegistry(QOSLevels.AtLeastOnce)
+    .get(topic)
+    ?.forEach((job) => {
+      handler(job.data);
+    });
+
+  /**
+   * Send all jobs to the newly registered handler
+   * that need to be seen exactly once
+   */
+  getJobRegistry(QOSLevels.ExactlyOnce)
+    .get(topic)
+    ?.forEach((job) => {
+      existingHandlers.forEach((entry) => {
+        // If this job has already been played for this consumer skip it
+        if (entry.seenJobs.has(JSON.stringify(job))) {
+          return;
+        }
+
+        // Add the job to the seen jobs for the consumer and send it
+        entry.seenJobs.set(JSON.stringify(job), null);
+        entry.handler(job.data);
+      });
+    });
 };
 
 /** Load the jobs from all blocking storage locations into the registry */
