@@ -1,8 +1,10 @@
 import { Job, QOSLevels } from "./job";
-import { getConsumerRegistry, getJobRegistry } from "./registry";
+import { getConsumerRegistry, getJobRegistry, registerJob } from "./registry";
 
 /** Sends a job along the bus */
 export const dispatchJob = (job: Job) => {
+  registerJob(job);
+
   const { topic, qos } = job;
   const consumers = getConsumerRegistry().get(topic);
 
