@@ -37,14 +37,24 @@ export type JobData = {
     | Array<JobData>;
 };
 
+export enum JobStore {
+  LocalStorage,
+  Cookie,
+  IndexedDB,
+}
+
 /** Represents the job object */
-export type Job = {
-  isDurable?: boolean;
+export interface Job {
+  isDurable?: JobStore;
   data?: JobData;
 
   topic: string;
   qos: QOSLevels;
-};
+}
+
+export interface IDBJob extends Job {
+  jobId?: string;
+}
 
 /** Validates that we have valid job data */
 export const isJobData = (x: unknown): x is JobData => {
@@ -53,6 +63,10 @@ export const isJobData = (x: unknown): x is JobData => {
   }
 
   if (!x) {
+    return false;
+  }
+
+  if (Array.isArray(x)) {
     return false;
   }
 
@@ -85,7 +99,14 @@ export const isJob = (x: unknown): x is Job => {
     return false;
   }
 
-  if (typeof (x as Job).qos !== "number") {
+  if (
+    typeof (x as Job).qos !== "number" ||
+    ![
+      QOSLevels.AtLeastOnce,
+      QOSLevels.AtMostOnce,
+      QOSLevels.ExactlyOnce,
+    ].includes((x as Job).qos)
+  ) {
     return false;
   }
 
@@ -95,8 +116,10 @@ export const isJob = (x: unknown): x is Job => {
 
   if (
     Object.keys(x).includes("isDurable") &&
-    typeof (x as Job).isDurable !== "undefined" &&
-    typeof (x as Job).isDurable !== "boolean"
+    (typeof (x as Job).isDurable !== "number" ||
+      ![JobStore.Cookie, JobStore.LocalStorage, JobStore.IndexedDB].includes(
+        (x as Job).isDurable as JobStore
+      ))
   ) {
     return false;
   }
@@ -105,7 +128,11 @@ export const isJob = (x: unknown): x is Job => {
 };
 
 /** Validates a collection of jobs */
-export const isJobCollection = (x: unknown[]): x is Job[] => {
+export const isJobCollection = (x: unknown): x is Job[] => {
+  if (!Array.isArray(x)) {
+    return false;
+  }
+
   for (let i = 0; i < x.length; i += 1) {
     const currentJob = x[i];
 

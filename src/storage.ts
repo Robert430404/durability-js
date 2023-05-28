@@ -1,5 +1,5 @@
 import { DBSchema, IDBPDatabase, openDB } from "idb";
-import { Job, isJobCollection } from "./job.ts";
+import { IDBJob, Job, isJobCollection } from "./job";
 
 /** IndexedDB configuration */
 enum DBConfiguration {
@@ -12,7 +12,7 @@ enum DBConfiguration {
 interface JobSchema extends DBSchema {
   [DBConfiguration.StoreName]: {
     key: string;
-    value: Job;
+    value: IDBJob;
   };
 }
 
@@ -89,7 +89,7 @@ export const getJobsFromLocalStorage = (): Job[] => {
 };
 
 /** Pulls any jobs from IndexedDB */
-export const getJobsFromIndexedDB = async (): Promise<Job[]> => {
+export const getJobsFromIndexedDB = async (): Promise<IDBJob[]> => {
   const connection = await getIndexedDBConnection();
   const storedJobs = await connection.getAll(DBConfiguration.StoreName);
 
@@ -101,7 +101,7 @@ export const getJobsFromIndexedDB = async (): Promise<Job[]> => {
     return [];
   }
 
-  return [];
+  return storedJobs;
 };
 
 /** Pulls all stored jobs from all storage locations */
@@ -109,3 +109,34 @@ export const getAllStoredJobs = (): Job[] => [
   ...getJobsFromCookie(),
   ...getJobsFromLocalStorage(),
 ];
+
+export const setLocalJob = (job: Job): void => {
+  const existingJobs = getJobsFromLocalStorage();
+
+  existingJobs.push(job);
+
+  localStorage.setItem(
+    JobStorageKeys.LocalStorage,
+    JSON.stringify(existingJobs)
+  );
+};
+
+export const setCookieJob = (job: Job): void => {
+  const existingJobs = getJobsFromCookie();
+
+  existingJobs.push(job);
+
+  document.cookie = `${JobStorageKeys.Cookie}=${JSON.stringify(existingJobs)}`;
+};
+
+export const setIDBJob = async (job: IDBJob): Promise<void> => {
+  const connection = await getIndexedDBConnection();
+
+  await connection.add(DBConfiguration.StoreName, job);
+};
+
+export const deleteIDBJob = async (jobId: string) => {
+  const connection = await getIndexedDBConnection();
+
+  await connection.delete(DBConfiguration.StoreName, jobId);
+};
